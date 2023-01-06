@@ -127,4 +127,14 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+<<<<<<< HEAD
 /data
+=======
+
+data/
+>>>>>>> 6913aca (update ignore file)
+
+data/
+
+# visual code settings
+.vscode/
