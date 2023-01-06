@@ -19,21 +19,23 @@ class VisionTransformer(nn.Module):
     def __init__(self, in_channels, patch_size, num_heads, expansion: int, drop_p: float,  feed_forward_drop_p: float, depth: int = 12) -> None:
         super().__init__()
         # patches
-        emb_dim = in_channels * (patch_size ** 2)
+        emb_dim = in_channels * (patch_size ** 2) # 32 * 16 * 16 
         self.patch_embedding = PatchEmbedding(
             in_channels=in_channels, patch_size=patch_size, emb_dim=emb_dim, img_size=224)
+        
         self.transformer_blocks = nn.Sequential(
             ResidualBlock(
                 nn.Sequential(
                     nn.LayerNorm(emb_dim),
                     MultiHeadAttention(emb_dim=emb_dim, num_heads=num_heads),
-                    nn.Dropout(drop_p),
+                    # nn.Dropout(drop_p),
                 )),
             ResidualBlock(
                 nn.Sequential(
                     nn.LayerNorm(emb_dim),
-                    MLPBlock(emb_dim, emb_dim,
-                             emb_dim, feed_forward_drop_p),
+                    nn.Linear(emb_dim, emb_dim),
+                    nn.GELU(),
+                    nn.Dropout(feed_forward_drop_p),
                     nn.Dropout(drop_p),
                 ))
 
@@ -50,6 +52,6 @@ class VisionTransformer(nn.Module):
 
 if __name__ == "__main__":
     x = torch.randn(5, 32, 224, 224).to("cuda")
-    model = VisionTransformer(in_channels=32, patch_size=16, num_heads=128, expansion=4, drop_p=0.1, feed_forward_drop_p=0.1, depth=4)
+    model = VisionTransformer(in_channels=32, patch_size=16, num_heads=128 * 7, expansion=4, drop_p=0.1, feed_forward_drop_p=0.1, depth=4)
     model.to("cuda")
     print(model(x).shape)

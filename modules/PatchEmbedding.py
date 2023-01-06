@@ -6,7 +6,7 @@ from einops import repeat
 
 
 class PatchEmbedding(nn.Module):
-    def __init__(self, in_channels: int = 3, patch_size: int = 16, emb_dim: int = 768, img_size=224) -> None:
+    def __init__(self, in_channels: int = 3, patch_size: int = 14, emb_dim: int = 768, img_size=224) -> None:
         super().__init__()
         self.patch_size = patch_size
         assert img_size % patch_size == 0, "Image size must be divisible by patch size."
