@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from .Block import ResidualBlock, MLPBlock
+
+from .Block import MLPBlock, ResidualBlock
 from .PatchEmbedding import PatchEmbedding
 
 
@@ -16,7 +17,7 @@ class MultiHeadAttention(nn.Module):
 
 
 class VisionTransformer(nn.Module):
-    def __init__(self, in_channels, patch_size, num_heads, expansion: int, drop_p: float,  feed_forward_drop_p: float, depth: int = 12) -> None:
+    def __init__(self, in_channels: int, patch_size: int, num_heads: int, expansion: int, drop_p: float,  feed_forward_drop_p: float, depth: int = 12) -> None:
         super().__init__()
         # patches
         emb_dim = in_channels * (patch_size ** 2) # 32 * 16 * 16 
@@ -28,7 +29,7 @@ class VisionTransformer(nn.Module):
                 nn.Sequential(
                     nn.LayerNorm(emb_dim),
                     MultiHeadAttention(emb_dim=emb_dim, num_heads=num_heads),
-                    # nn.Dropout(drop_p),
+                    nn.Dropout(drop_p),
                 )),
             ResidualBlock(
                 nn.Sequential(
@@ -36,7 +37,6 @@ class VisionTransformer(nn.Module):
                     nn.Linear(emb_dim, emb_dim),
                     nn.GELU(),
                     nn.Dropout(feed_forward_drop_p),
-                    nn.Dropout(drop_p),
                 ))
 
         )
