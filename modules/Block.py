@@ -3,10 +3,10 @@ import torch.nn as nn
 
 
 class ResidualBlock(nn.Module):
-    def __init__(self, fn) -> None:
+    def __init__(self, fn: nn.Module) -> None:
         super().__init__()
         self.fn = fn
-
+        
     def forward(self, x: torch.Tensor, **kwargs) -> torch.Tensor:
         return self.fn(x, **kwargs) + x
 

@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 class LocalFeatureExtraction(nn.Sequential):
     def __init__(self):
         super(LocalFeatureExtraction, self).__init__(

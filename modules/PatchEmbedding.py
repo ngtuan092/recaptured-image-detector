@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from einops.layers.torch import Rearrange
 from einops import repeat
+from einops.layers.torch import Rearrange
 
 
 class PatchEmbedding(nn.Module):
