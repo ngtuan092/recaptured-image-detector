@@ -2,7 +2,6 @@ from modules.model import Model
 import torch
 import torch.nn as nn
 import torchsummary as summary
-from modules.VisionTransformer import MultiHeadAttention
 if __name__ == '__main__':
     torch.manual_seed(0)
     
