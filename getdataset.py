@@ -24,10 +24,12 @@ def getdataset(path, batch_size):
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
 
-    train_set = ImageFolder(os.path.join(path, 'train'),
-                            transform=train_transform)
-    test_set = ImageFolder(os.path.join(path, 'test'),
-                           transform=test_transform)
+    train_set = ImageFolder(os.path.join(path))
+    train_set, test_set = torch.utils.data.random_split(
+        train_set, [int(len(train_set)*0.8), len(train_set)-int(len(train_set)*0.8)])
+    train_set.dataset.transform = train_transform
+    test_set.dataset.transform = test_transform
+
     train_loader = DataLoader(train_set, batch_size=batch_size, shuffle=True)
     test_loader = DataLoader(test_set, batch_size=batch_size, shuffle=False)
     return train_loader, test_loader
@@ -38,4 +40,7 @@ if __name__ == "__main__":
     load_dotenv()
     import os
     trainloader, testloader = getdataset(
-        path=os.getenv('DATAPATH'), batch_size=32)
+        path=os.getenv('DATAPATH'), batch_size=3)
+
+    torch.save(trainloader, 'loaders/trainloader.pt')
+    torch.save(testloader, 'loaders/testloader.pt')

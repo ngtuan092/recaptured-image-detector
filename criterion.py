@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+import torchsummary
 
 class FocalLoss(nn.Module):
     def __init__(self, alpha=1, gamma=2, reduction='mean'):
@@ -12,7 +12,7 @@ class FocalLoss(nn.Module):
 
     def forward(self, inputs, targets):
 
-        BCE_loss = F.cross_entropy(inputs, targets, reduction='none')
+        BCE_loss = F.cross_entropy(inputs, targets, reduction='none', label_smoothing=0.1)
         pt = torch.exp(-BCE_loss)
         F_loss = self.alpha * (1-pt)**self.gamma * BCE_loss
 
